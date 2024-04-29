@@ -1,0 +1,20 @@
+---
+- name: Create a local user
+  hosts: localhost
+  become: yes
+  vars_prompt:
+    - name: username
+      prompt: "What is your username?"
+      private: false
+    - name: my_password
+      prompt: "Enter your password"
+      private: true
+      encrypt: sha512_crypt
+      confirm: true
+      salt_size: 7
+  tasks:
+    - name: Create user '{{ username }}'
+      user:
+        name: "{{ username }}"
+        password: "{{ my_password }}"
+        state: present
